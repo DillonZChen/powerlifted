@@ -11,21 +11,18 @@
 #include "../datalog/grounder/weighted_grounder.h"
 
 #include "../ext/wlplan/include/feature_generation/wl_features.hpp"
+#include "../ext/wlplan/include/planning/atom.hpp"
+#include "../ext/wlplan/include/planning/predicate.hpp"
+#include "../ext/wlplan/include/planning/problem.hpp"
+#include "../ext/wlplan/include/planning/state.hpp"
 
-#include <chrono>
 #include <memory>
-
-#define get_time() std::chrono::high_resolution_clock::now().time_since_epoch();
 
 
 class WlGooseHeuristic : public Heuristic {
 protected:
+    std::unordered_map<int, planning::Predicate> pwl_index_to_predicate;
     std::shared_ptr<feature_generation::WLFeatures> model;
-
-    std::chrono::duration<double> start_time, end_time;
-    double graph_time;
-    double wl_time;
-    double linear_time;
 
 public:
     WlGooseHeuristic(const Options &opts, const Task &task);

@@ -10,33 +10,37 @@
  */
 class Predicate {
 public:
-  Predicate(std::string &&name, int index, int arity, bool static_predicate,
-            std::vector<int> &&types)
-      : name(std::move(name)), index(index), arity(arity),
-        static_predicate(static_predicate), types(std::move(types)) {
-    // Constructor
-  }
+    Predicate() = default;
 
-  void addArgument(int i) { types.push_back(i); }
+    Predicate(
+        std::string &&name, int index, int arity, bool static_predicate, std::vector<int> &&types)
+        : name(std::move(name)),
+          index(index),
+          arity(arity),
+          static_predicate(static_predicate),
+          types(std::move(types))
+    {
+        // Constructor
+    }
 
-  const std::string &get_name() const;
+    void addArgument(int i) { types.push_back(i); }
 
-  int getArity() const;
+    const std::string &get_name() const;
 
-  const std::vector<int> &getTypes() const;
+    int getArity() const;
 
-  bool isStaticPredicate() const;
+    const std::vector<int> &getTypes() const;
 
-  int get_index() const {
-      return index;
-  }
+    bool isStaticPredicate() const;
+
+    int get_index() const { return index; }
 
 private:
-  std::string name;
-  int index;
-  int arity;
-  bool static_predicate;
-  std::vector<int> types;
+    std::string name;
+    int index;
+    int arity;
+    bool static_predicate;
+    std::vector<int> types;
 };
 
-#endif // SEARCH_PREDICATE_H
+#endif  // SEARCH_PREDICATE_H
