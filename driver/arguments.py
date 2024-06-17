@@ -28,7 +28,8 @@ EVALUATOR_CHOICES = ["blind",
                      "add",
                      "hmax",
                      "ff",
-                     "rff"]
+                     "rff",
+                     "wlgoose"]
 
 SUCCESSOR_GENERATOR_CHOICES = ['yannakakis',
                                'join',
@@ -60,6 +61,8 @@ def parse_options():
                         default='ff',
                         choices=EVALUATOR_CHOICES,
                         help='Heuristic to guide the search (ignore in case of blind search)')
+    parser.add_argument('-m', '--model_path', default="FilePathUndefined",
+                        help="Path to the wlgoose model file")
     parser.add_argument('-g', '--generator', dest='generator', action='store',
                         default='yannakakis', help='Successor generator method',
                         choices=SUCCESSOR_GENERATOR_CHOICES)

@@ -14,3 +14,4 @@ powerlifted.sif
 reports/
 local-tests/
 *.out
+src/search/ext

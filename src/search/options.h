@@ -18,6 +18,10 @@ class Options {
     bool novelty_early_stop;
     unsigned seed;
 
+    std::string domain_path;
+    std::string problem_path;
+    std::string goose_model_path;
+
 public:
     Options(int argc, char** argv) {
         po::options_description description("Allowed options");
@@ -32,6 +36,10 @@ public:
             ("plan-file", po::value<std::string>()->default_value("FilePathUndefined"), "Plan file.")
             ("only-effects-novelty-check", po::value<bool>()->default_value(false), "Check only effects of applied actions when evaluation novelty of a state.")
             ("novelty-early-stop", po::value<bool>()->default_value(false), "Stop evaluating novelty as soon as w-value is defined.")
+            // Goose specific options
+            ("domain_path", po::value<std::string>()->default_value("FilePathUndefined"), "Path to the domain file.")
+            ("problem_path", po::value<std::string>()->default_value("FilePathUndefined"), "Path to the problem file.")
+            ("goose_model_path", po::value<std::string>()->default_value("FilePathUndefined"), "Path to the goose model.")
             ;
 
         po::variables_map vm;
@@ -59,6 +67,10 @@ public:
         only_effects_opt = vm["only-effects-novelty-check"].as<bool>();
         novelty_early_stop = vm["novelty-early-stop"].as<bool>();
         seed = vm["seed"].as<unsigned>();
+
+        domain_path = vm["domain_path"].as<std::string>();
+        problem_path = vm["problem_path"].as<std::string>();
+        goose_model_path = vm["goose_model_path"].as<std::string>();
 
     }
 
@@ -98,6 +110,17 @@ public:
         return seed;
     }
 
+    const std::string &get_domain_path() const {
+        return domain_path;
+    }
+
+    const std::string &get_problem_path() const {
+        return problem_path;
+    }
+
+    const std::string &get_goose_model_path() const {
+        return goose_model_path;
+    }
 
 };
 

@@ -32,6 +32,8 @@ public:
      */
     virtual int compute_heuristic(const DBState &s, const Task &task) = 0;
 
+    virtual void print_statistics() {};
+
     const std::vector<std::vector<GroundAtom>> &get_useful_atoms() const {
         return useful_atoms;
     }

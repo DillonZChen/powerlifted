@@ -70,7 +70,10 @@ utils::ExitCode GreedyBestFirstSearch<PackedStateT>::search(const Task &task,
         assert(sid.id() >= 0 && (unsigned) sid.id() < space.size());
 
         DBState state = packer.unpack(space.get_state(sid));
-        if (check_goal(task, generator, timer_start, state, node, space)) return utils::ExitCode::SUCCESS;
+        if (check_goal(task, generator, timer_start, state, node, space)) {
+          heuristic.print_statistics();
+          return utils::ExitCode::SUCCESS;
+        }
 
         const auto applicable = generator.get_applicable_actions(action_schemas, state);
         statistics.inc_generated(applicable.size());
