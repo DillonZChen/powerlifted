@@ -7,22 +7,17 @@ using namespace std;
 
 WlGooseHeuristic::WlGooseHeuristic(const Options &opts, const Task &task)
 {
-    // Read paths
-    std::string model_path = opts.get_goose_model_path();
-    std::string domain_path = opts.get_domain_path();
-    std::string problem_path = opts.get_problem_path();
-
-    model = std::make_shared<feature_generation::WLFeatures>(model_path);
+    model = std::make_shared<feature_generation::WLFeatures>(opts.get_goose_model_path());
 
     const planning::Domain domain = *(model->get_domain());
-
-    // Construct a wlplan Problem from Powerlifted
-    // TODO: add wlplan functionality to just parse PDDL problems from c++
     std::unordered_map<std::string, planning::Predicate> name_to_predicate;
     for (const auto &pred : domain.predicates) {
         name_to_predicate[pred.name] = pred;
     }
 
+    /* Construct a WLPlan Problem from Powerlifted */
+
+    // Preprocess predicates from PWL
     for (size_t i = 0; i < task.predicates.size(); i++) {
         std::string pred_name = task.predicates[i].get_name();
         // predicates that may get skipped are '=' and static predicates
@@ -32,11 +27,13 @@ WlGooseHeuristic::WlGooseHeuristic(const Options &opts, const Task &task)
         pwl_index_to_predicate[i] = name_to_predicate.at(pred_name);
     }
 
+    // Collect objects
     std::vector<std::string> objects;
     for (const auto &obj : task.objects) {
         objects.push_back(obj.get_name());
     }
 
+    // Deal with goals
     std::vector<planning::Atom> positive_goals;
     std::vector<planning::Atom> negative_goals;
 
@@ -67,6 +64,7 @@ WlGooseHeuristic::WlGooseHeuristic(const Options &opts, const Task &task)
         }
     }
 
+    // Construct WLPlan problem and set for model
     planning::Problem problem = planning::Problem(domain, objects, positive_goals, negative_goals);
     model->set_problem(problem);
 }
@@ -83,7 +81,7 @@ int WlGooseHeuristic::compute_heuristic(const DBState &s, const Task &task)
         }
     }
     const auto &predicate_indices = s.get_relations();
-    for (const auto &kv: pwl_index_to_predicate) {
+    for (const auto &kv : pwl_index_to_predicate) {
         int i = kv.first;
         planning::Predicate predicate = kv.second;
         unordered_set<GroundAtom, TupleHash> tuples = predicate_indices[i].tuples;
