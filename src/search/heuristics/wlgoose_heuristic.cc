@@ -95,8 +95,9 @@ int WlGooseHeuristic::compute_heuristic(const DBState &s, const Task &task)
     }
 
     double h = model->predict(state);
+    int h_round = static_cast<int>(std::round(h));
 
-    return (int)h;
+    return h_round;
 }
 
 void WlGooseHeuristic::print_statistics()
